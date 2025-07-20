@@ -231,13 +231,10 @@ def generate_transaction(order_id):
 
     return rows
 
-def generate_dataset(num_rows=100000, output_path="ecommerce_dummy_data.csv"):
+def generate_dataset(num_rows, output_path):
     all_rows = []
     for i in range(1, num_rows + 1):
         all_rows.extend(generate_transaction(i))
 
     df = pd.DataFrame(all_rows)
     df.to_csv(output_path, index=False)
-
-if __name__ == "__main__":
-    generate_dataset()
