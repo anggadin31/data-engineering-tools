@@ -1,5 +1,3 @@
----
-
 ## 🌐 Ingestion Flow Overview
 
 The ingestion flow is designed to simulate a real-world cloud data pipeline:
