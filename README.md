@@ -44,3 +44,10 @@ pip install -r requirements.txt
 ## 📌 Notes
 
 This project is under active development as a personal study repository. Expect rapid iterations and ongoing changes.
+
+## 🤝 Collaboration & Contact
+
+If you're interested in discussing data engineering concepts, sharing insights, or exploring potential collaboration opportunities, feel free to reach out:
+📫 anggadin31@gmail.com
+
+If you find this repository useful or insightful, a ⭐️ would be truly appreciated.
