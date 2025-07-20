@@ -16,30 +16,3 @@ CREATE TABLE raw_dbt.shop.orders
   discount FLOAT,
   ingested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE analytics_dbt.dbt_learning.dim_customer (
-    customer_id INTEGER PRIMARY KEY AUTOINCREMENT ORDER,
-    name VARCHAR(100),
-    email VARCHAR(150),
-    phone varchar(20)
-);
-
-CREATE TABLE analytics_dbt.dbt_learning.dim_category (
-    category_id INTEGER PRIMARY KEY AUTOINCREMENT ORDER,
-    category VARCHAR(150)
-);
-
-CREATE TABLE analytics_dbt.dbt_learning.dim_product (
-    product_id INTEGER PRIMARY KEY AUTOINCREMENT ORDER,
-    category_id INTEGER,
-    product_name VARCHAR(150)
-);
-
-CREATE TABLE analytics_dbt.dbt_learning.fct_orders (
-    order_id INTEGER PRIMARY KEY AUTOINCREMENT ORDER,
-    order_date DATETIME,
-    customer_id INTEGER,
-    total INTEGER,
-    payment_method VARCHAR(50),
-    order_status VARCHAR(50)
-);
