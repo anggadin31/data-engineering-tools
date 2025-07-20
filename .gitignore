@@ -1,0 +1,43 @@
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environments
+venv/
+
+# Ignore DBT build artifacts
+dbt/target/
+dbt/dbt_modules/
+dbt/logs/
+dbt/.dbt/
+
+# Ignore secrets and environment files
+.env
+.env.*
+
+# Ignore build artifacts
+*.egg-info/
+dist/
+build/
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore common data files
+*.csv
+*.parquet
+*.json
+
+# Ignore learning folder
+learning/

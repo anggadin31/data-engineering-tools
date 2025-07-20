@@ -1,0 +1,166 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Dimension tables containing all customers data"
+    columns:
+      - name: customer_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Customer's name"
+        tests:
+          - not_null
+      - name: email
+        description: "Customer's email"
+        tests:
+          - unique
+          - not_null
+      - name: phone
+        description: "Customer's mobile phone number"
+        tests:
+          - unique
+          - not_null
+      - name: updated_at
+        description: "Timestamp when the record was ingested or last modified in the data warehouse."
+        tests:
+          - not_null
+  - name: dim_products
+    description: "Dimension table containing cleaned and unique products and the category"
+    columns:
+      - name: product_key
+        description: "Primary key generated with surrogate_key function from dbt_utils packages using product_name as the field to generate the key"
+        tests:
+          - unique
+          - not_null
+      - name: category_key
+        description: "Foreign key to dim_categories table"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_categories')
+              field: category_key
+      - name: product_name
+        description: "Name of the product"
+        tests:
+          - not_null
+          - unique
+  - name: dim_categories
+    description: "Dimension table containing unique category that can assigned to each product"
+    columns:
+      - name: category_key
+        description: "Primary key generated with surrogate_key function from dbt_utils packages using category as the field to generate the key"
+        tests:
+          - unique
+          - not_null
+      - name: category
+        description: "Category of each product"
+        tests:
+          - unique
+          - not_null
+  - name: fct_orders
+    description: "Fact tables containing summary of each order id"
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: order_date
+        description: "Date when the order or transaction happened"
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customers dimension table"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: payment_method
+        description: "Payment method used by customer to purchase items"
+        tests:
+          - not_null
+      - name: total_amount
+        description: "Total net amount purchased by customer in 1 order"
+        tests:
+          - not_null
+          - expect_positive
+      - name: order_status
+        description: "Summary status of an order"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'done'
+                - 'in process'
+                - 'cancelled'
+      - name: total_order_returned
+        description: "Total items that have been returned"
+        tests:
+          - not_null
+          - expect_at_least_zero
+      - name: updated_at
+        description: "Timestamp indicating the last time this record was updated in the source system. Used for incremental loading."
+        tests:
+          - not_null
+  - name: fct_orders_items
+    description: "Fact table containing detailed items per order"
+    columns:
+      - name: order_id
+        description: "Foreign key to fct_order table"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_orders')
+              field: order_id
+      - name: product_key
+        description: "Foreign key to dim_products table"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_key
+      - name: quantity
+        description: "Quantity of each product purchased by customer"
+        tests:
+          - not_null
+          - expect_positive
+      - name: price
+        description: "Price per product"
+        tests:
+          - not_null
+          - expect_positive
+      - name: discount
+        description: "Discount given by shops for an item"
+        tests:
+          - not_null
+          - expect_at_least_zero
+      - name: final_price
+        description: "Final price of an order item after applying discount. Calculated as (quantity × price) − discount."
+        tests:
+          - not_null
+          - expect_positive
+      - name: shipping_cost
+        description: "Cost incurred to ship the order to the customer."
+        tests:
+          - not_null
+          - expect_at_least_zero
+      - name: shipping_status
+        description: "Current shipping status for each product"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "shipped"
+                - "in transit"
+                - "delivered"
+                - "cancelled"
+                - "returned"
+                - "done"
+      - name: updated_at
+        description: "Timestamp indicating the last time this record was updated in the source system. Used for incremental loading."
+        tests:
+          - not_null
